@@ -1,0 +1,5 @@
+[package]
+name = "@pactia/kernel-quality"
+version = "0.0.1"
+kind = "library"
+description = "Testing and quality gates beyond unit code"

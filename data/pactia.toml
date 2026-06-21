@@ -1,0 +1,5 @@
+[package]
+name = "@pactia/kernel-data"
+version = "0.0.1"
+kind = "library"
+description = "Persistence and data architecture intent — stores, cache, schema, consistency"

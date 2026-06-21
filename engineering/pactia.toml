@@ -1,0 +1,5 @@
+[package]
+name = "@pactia/kernel-engineering"
+version = "0.0.1"
+kind = "library"
+description = "Repository hygiene, documentation, patterns, and system design intent"

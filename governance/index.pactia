@@ -1,0 +1,22 @@
+pactia 1.0
+// Package: @pactia/kernel-governance — policy, compliance, audit (v0.0.1)
+
+export def @compliance in product, module {
+  > Regulatory or organizational compliance flags — GDPR, SOC2, HIPAA-style requirements at intent level.
+}
+
+export def @audit in module, service {
+  > Audit logging requirements — who did what, when, and which fields must appear in immutable audit trails.
+}
+
+export def @secrets in module, product {
+  > Secret handling policy — never commit credentials, rotation expectations, and injection via environment or vault.
+}
+
+export def @residency in product, module {
+  > Data residency constraints — geographic regions where data may be stored and processed.
+}
+
+export def @ratelimit in module, service {
+  > Rate limiting intent — quotas per actor, IP, or API key to protect availability and fairness.
+}

@@ -1,0 +1,38 @@
+pactia 1.0
+// Package: @pactia/kernel-engineering — repo hygiene, patterns, system design (v0.0.1)
+
+export def @layout in product {
+  > Repository layout intent — monorepo versus polyrepo, package boundaries, and where source lives.
+}
+
+export def @ownership in product, module {
+  > Team ownership — who maintains this product or module, CODEOWNERS-style responsibility intent.
+}
+
+export def @documentation in product, module {
+  > Documentation requirements — ADRs, README, API docs, and onboarding material expected for the scope.
+}
+
+export def @versioning in product, module, service {
+  > Versioning and deprecation policy — semver, API lifecycle, and sunset timelines for consumers.
+}
+
+export def @pattern in module, service, model {
+  > Named design pattern intent — repository, CQRS, saga, outbox, or other structural pattern in prose.
+}
+
+export def @context in product {
+  > System context — users, external systems, and boundaries in a C4-style context description.
+}
+
+export def @capacity in product, module {
+  > Capacity and scale targets — expected load, growth, and headroom for the scope.
+}
+
+export def @resilience in module, service {
+  > Resilience patterns — timeouts, retries, circuit breaking, and bulkhead intent without library names.
+}
+
+export def @flow in product, module {
+  > Data and control flow — synchronous versus asynchronous paths, event flows, and integration topology.
+}

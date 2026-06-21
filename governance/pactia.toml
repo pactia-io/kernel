@@ -1,0 +1,5 @@
+[package]
+name = "@pactia/kernel-governance"
+version = "0.0.1"
+kind = "library"
+description = "Policy, compliance, audit, and security governance intent"

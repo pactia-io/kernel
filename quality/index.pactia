@@ -1,0 +1,14 @@
+pactia 1.0
+// Package: @pactia/kernel-quality — testing and conformance (v0.0.1)
+
+export def @integration_test in module, service {
+  > Integration test intent — exercises real databases, wire boundaries, or external systems with controlled fixtures.
+}
+
+export def @contract_test in module, service {
+  > Consumer-driven contract test — verifies API promises between this service and its callers or dependencies.
+}
+
+export def @load_test in module, service {
+  > Load or performance test intent — throughput, concurrency, and SLO validation under stress.
+}
