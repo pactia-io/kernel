@@ -114,8 +114,9 @@ Testing and conformance beyond unit code.
 | Tag | Purpose |
 | --- | --- |
 | `@integration_test` | Real DB, wire boundaries, external systems |
-| `@contract_test` | Consumer-driven contracts |
-| `@load_test` | Performance and capacity validation |
+| `@unit_test` | Isolated logic — mocks, no real wire or database |
+| `@load_test` | Performance and capacity validation under stress |
+| `@benchmark` | Timed baselines for a specific path — latency and regression tracking |
 | `@gate` | CI gates — coverage, lint, security scan (extends module scope) |
 
 ### Governance (`@pactia/kernel-governance`) — Phase 2
