@@ -22,7 +22,7 @@ export def @pactia in product, module, service, model {
 // --- product ---
 
 export def @stack in product {
-  > Optional stack profile block for extra platform fields after a stack-package macro such as rust_anb.
+  > Optional stack profile block for extra platform fields after a stack-package macro imported in source.
   > Stack binding is done in source via import and product-level stack macros, not inside this tag alone.
 }
 

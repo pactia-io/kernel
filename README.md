@@ -7,19 +7,21 @@ Kernel tags and macros describe *what* a product must satisfy across architectur
 Publish target: **`github.com/pactia-lang/kernel`** (git remote + semver tags, Go-style).  
 Consume with: `import @pactia/kernel;` in `product.pactia` / package `index.pactia`.
 
+Stack, protocol, surface, and vertical packages live in **[pactia-lang/pactia-io](https://github.com/pactia-lang/pactia-io)** — not in this repo.
+
 Part of: [pactia-lang/spec](../spec/docs/packages.md) | [language-spec](../spec/docs/language-spec.md)
 
 ---
 
 ## Role in the stack
 
-| Layer | Package | Owns |
-| --- | --- | --- |
-| **Kernel** | `@pactia/kernel` (+ optional `@pactia/kernel-*`) | Universal structure and engineering intent |
-| **Stack** | `@pactia/rust-anb`, … | Platform law — language, framework, CI, deploy defaults |
-| **Protocol** | `@pactia/protocol-rest`, … | Wire format — `method`, `path`, gRPC, GraphQL |
-| **Vertical** | `@pactia/kyc-compliance`, … | Domain patterns — payments, catalog, compliance entities |
-| **Surface** | `@pactia/surface-react`, … | UI framework registration |
+| Layer | Package | Publish | Owns |
+| --- | --- | --- | --- |
+| **Kernel** | `@pactia/kernel` (+ `@pactia/kernel-*`) | [pactia-lang/kernel](https://github.com/pactia-lang/kernel) | Universal structure and engineering intent |
+| **Stack** | `@pactia/*` stack crates | [pactia-lang/pactia-io](https://github.com/pactia-lang/pactia-io) | Platform law — language, framework, CI, deploy defaults |
+| **Protocol** | `@pactia/protocol-*` | [pactia-lang/pactia-io](https://github.com/pactia-lang/pactia-io) | Wire format — REST, gRPC, GraphQL, … |
+| **Vertical** | `@pactia/*` domain patterns | [pactia-lang/pactia-io](https://github.com/pactia-lang/pactia-io) | Payments, catalog, compliance entities, … |
+| **Surface** | `@pactia/surface-*` | [pactia-lang/pactia-io](https://github.com/pactia-lang/pactia-io) | UI framework registration |
 
 Kernel answers **what**. Stack and protocol answer **how**.
 
@@ -38,22 +40,23 @@ Kernel answers **what**. Stack and protocol answer **how**.
 
 ---
 
-## Planned repository layout
+## Repository layout
 
 ```text
 kernel/
-  README.md                 # this file
-  pactia.toml               # [package] name = "@pactia/kernel"
-  index.pactia              # core export defs (Phase 1)
-  CHANGELOG.md
-
-  # optional slices (Phase 2+) — separate index.pactia or separate published packages
-  data/index.pactia         # @store, @cache, @schema, …
-  ops/index.pactia            # @deploy, @observe, @slo, …
-  quality/index.pactia        # @test, @integration_test, @gate, …
-  governance/index.pactia     # @policy, @compliance, @audit, …
-  engineering/index.pactia    # @pattern, @ownership, @documentation, …
+  README.md
+  core/
+    pactia.toml               # @pactia/kernel
+    index.pactia              # core tags + @pactia
+  data/pactia.toml + index.pactia       # @pactia/kernel-data
+  ops/pactia.toml + index.pactia        # @pactia/kernel-ops
+  quality/pactia.toml + index.pactia    # @pactia/kernel-quality
+  governance/pactia.toml + index.pactia # @pactia/kernel-governance
+  engineering/pactia.toml + index.pactia
+  architecture/pactia.toml + index.pactia
 ```
+
+Each slice is a separate published package at v0.0.1 — `pactia.toml` + `index.pactia` only, prose-first export defs.
 
 Products import only what they need:
 
@@ -73,7 +76,7 @@ Structure every product shares.
 
 | Scope | Tags / macros | Purpose |
 | --- | --- | --- |
-| **product** | `@topology`, `@tenancy`, `@guide`, `@stack` | System shape, isolation, guidance; `@stack` is optional profile block (stack binding is `#rust_anb` in stack packages) |
+| **product** | `@topology`, `@tenancy`, `@guide`, `@stack`, `@pactia` | System shape, isolation, guidance; `@stack` is optional profile block after a stack-package macro imported in source |
 | **module** | `@actor`, `@rule`, `@security`, `@integration`, `@event`, `@environment`, `@deploy`, `@gate` | Roles, rules, integrations, events, env, deploy intent, quality gates |
 | **model** | `@entity`, `@enum`, `@relation`, `@states`, `@pk`, `@fk`, `@unique`, `@index`, `@nullable`, `@pii` | Data model and field constraints |
 | **service** | `@api`, `@auth`, `@input`, `@output`, `@public`, `@emit`, `@throws`, `@status`, `@test`, `@must` | Operations, contracts, acceptance scenarios, obligations |
@@ -161,11 +164,11 @@ Repository and practice intent (for humans and agents, not a replacement for git
 
 | Concern | Where it lives |
 | --- | --- |
-| Language, framework, ORM, CI YAML | Stack packages (`@pactia/rust-anb`, …) |
-| REST `method` / `path`, gRPC proto | Protocol packages |
-| `Order`, `Invoice`, KYC rules | Product source or vertical packages |
-| React / SwiftUI components | Surface packages |
-| Pagination defaults (`#paginated`, `#list`) | Stack macros |
+| Language, framework, ORM, CI YAML | Stack packages in [pactia-io](https://github.com/pactia-lang/pactia-io) |
+| REST `method` / `path`, gRPC proto | Protocol packages in [pactia-io](https://github.com/pactia-lang/pactia-io) |
+| `Order`, `Invoice`, KYC rules | Product source or vertical packages in [pactia-io](https://github.com/pactia-lang/pactia-io) |
+| React / SwiftUI components | Surface packages in [pactia-io](https://github.com/pactia-lang/pactia-io) |
+| Pagination defaults, list helpers | Stack macros |
 
 ---
 
@@ -185,7 +188,7 @@ Kernel tags support graded precision (see [overview](../spec/docs/overview.md)):
 
 | Phase | Deliverable |
 | --- | --- |
-| **1** | `pactia.toml` + `index.pactia` with core tags (relay-compatible); publish `v1.0.0` |
+| **1** | Core + satellite packages published from this repo (`core/`, `data/`, `ops/`, …) at v0.0.1 |
 | **2** | Satellite packages or submodules: data, ops, quality, governance, engineering |
 | **3** | Architecture extensions; `@pattern` macro library; JSON Schema bodies in spec sync |
 
