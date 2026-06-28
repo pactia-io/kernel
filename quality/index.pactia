@@ -16,3 +16,41 @@ export def @load_test in module, service {
 export def @benchmark in module, service {
   > Benchmark intent — timed measurement of a specific operation or hot path for latency, allocation, or regression baselines in CI.
 }
+
+// --- round 2 ---
+
+export def @e2e_test in module {
+  > End-to-end test — exercises full system with real dependencies.
+}
+
+export def @contract_test in module {
+  > Consumer-driven contract test — Pact-style provider verification.
+}
+
+export def @mutation_test in module {
+  > Mutation testing gates — kill rate threshold and mutant coverage targets.
+}
+
+export def @fuzz_test in module, service {
+  > Fuzz testing — input space, duration, and crash criteria.
+}
+
+export def @snapshot_test in module {
+  > Snapshot or approval testing — expected output comparison.
+}
+
+export def @chaos_test in module {
+  > Chaos engineering experiment — hypothesis, blast radius, steady-state metrics.
+}
+
+export def @smoke_test in module, service {
+  > Smoke or sanity test — minimal critical-path verification after deploy.
+}
+
+export def @regression_test in module {
+  > Regression test suite — scope, environment, and trigger conditions.
+}
+
+export def @accessibility_test in module {
+  > Accessibility automated checks — WCAG level and tooling reference.
+}

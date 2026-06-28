@@ -1,0 +1,75 @@
+pactia 1.0
+// Package: @pactia/kernel-security — security posture and threat model intent (v1.0.0)
+import @pactia/kernel;
+
+export def @cors in product, module {
+  > CORS policy — allowed origins, methods, headers, and credentials configuration.
+}
+
+export def @csp in product {
+  > Content Security Policy directives — script-src, style-src, connect-src, and reporting.
+}
+
+export def @csrf in product, module {
+  > CSRF protection — token strategy and SameSite cookie configuration.
+}
+
+export def @xss in product {
+  > XSS prevention — output encoding strategy and trusted HTML boundaries.
+}
+
+export def @sql_injection in product {
+  > SQL injection prevention — parameterized queries only; ORM-enforced policy.
+}
+
+export def @jwt in product, module {
+  > JWT configuration — signing algorithm, expiry, rotation policy, and claim requirements.
+}
+
+export def @oauth2 in product {
+  > OAuth2 / OIDC provider configuration — supported flows, scopes, and PKCE requirement.
+}
+
+export def @api_key in product, module {
+  > API key management — rotation schedule, scope definition, and header convention.
+}
+
+export def @mtls in product, module {
+  > Mutual TLS — certificate authority, rotation interval, and enforcement scope.
+}
+
+export def @waf in product {
+  > Web Application Firewall — rule sets, exclusion patterns, and log integration.
+}
+
+export def @ddos in product {
+  > DDoS protection — provider, baseline thresholds, and mitigation strategy.
+}
+
+export def @secret_rotation in product {
+  > Secret rotation — rotation frequency, automation approach, and zero-downtime strategy.
+}
+
+export def @rbac in module {
+  > Role-based access control — role hierarchy, permission model, and assignment rules.
+}
+
+export def @abac in module {
+  > Attribute-based access control — policy language, policy decision point, and policy enforcement point.
+}
+
+export def @zero_trust in product {
+  > Zero trust architecture — microsegmentation, continuous verification, and least-privilege access.
+}
+
+export def @vulnerability_scan in product {
+  > Vulnerability scanning — SAST, DAST, SCA tooling and quality gate thresholds.
+}
+
+export def @security_headers in product {
+  > Security headers — HSTS, X-Frame-Options, X-Content-Type-Options, Referrer-Policy.
+}
+
+export def @secure_by_default in product {
+  > Secure-by-default principle — deny-by-default, least privilege, and fail-secure defaults.
+}

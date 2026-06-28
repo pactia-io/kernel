@@ -28,3 +28,41 @@ export def @retain in field {
 export def @encrypt in field {
   > Field must be encrypted at rest or in transit — key management intent without naming a KMS product.
 }
+
+// --- round 2 ---
+
+export def @partition in model {
+  > Table or collection partitioning strategy — key, type, and granularity.
+}
+
+export def @shard in model, module {
+  > Data sharding key and strategy — horizontal partitioning across nodes.
+}
+
+export def @replicate in model {
+  > Replication intent — leader-follower, multi-master, or read-replica topology.
+}
+
+export def @materialize in module {
+  > Materialized view or precomputed cache intent — refresh strategy and staleness tolerance.
+}
+
+export def @ttl in model, field {
+  > Time-to-live for expiring data — duration after which records are automatically removed.
+}
+
+export def @connection_pool in module {
+  > Database connection pool sizing and timeout intent — min, max, idle timeout.
+}
+
+export def @migration_strategy in model {
+  > Schema migration strategy — expand-contract, blue-green, or shadow deployment.
+}
+
+export def @transaction in service {
+  > Transaction boundary and isolation level — read committed, serializable, or snapshot.
+}
+
+export def @bulk in service {
+  > Bulk operation semantics — batch size limits and atomicity expectations.
+}

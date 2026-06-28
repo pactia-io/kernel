@@ -36,3 +36,53 @@ export def @resilience in module, service {
 export def @flow in product, module {
   > Data and control flow — synchronous versus asynchronous paths, event flows, and integration topology.
 }
+
+// --- round 2 ---
+
+export def @branch_strategy in product {
+  > Git branching model — trunk-based, gitflow, or GitHub flow.
+}
+
+export def @commit_convention in product {
+  > Commit message convention — conventional commits format and signing requirement.
+}
+
+export def @code_review in product {
+  > Code review requirements — minimum approvers, checklist, blocking rules.
+}
+
+export def @pr_template in product {
+  > Pull request description requirements — linked issue, test plan, screenshots.
+}
+
+export def @changelog in product {
+  > Changelog generation policy — keep-a-changelog format, automation.
+}
+
+export def @monorepo_tool in product {
+  > Monorepo tooling — Turborepo, Nx, Bazel, or Lerna intent.
+}
+
+export def @package_manager in product {
+  > Package manager choice — npm, yarn, pnpm, cargo, or pip.
+}
+
+export def @lint_policy in product, module {
+  > Linter configuration — ruleset, severity, auto-fix policy.
+}
+
+export def @format_policy in product {
+  > Code formatter and line-length conventions — tool and configuration reference.
+}
+
+export def @codegen in module, service {
+  > Code generation intent — OpenAPI, gRPC, or GraphQL schema generation target.
+}
+
+export def @breaking_change in product {
+  > Breaking change policy — detection method, communication channel, migration guide requirement.
+}
+
+export def @tech_debt in module {
+  > Technical debt tracking — item identifier, severity, and repayment plan.
+}

@@ -193,3 +193,88 @@ export def #idempotent in service {
 export def #database in service {
   > Service persists state through a declared store — database or repository access is in scope for this unit.
 }
+
+// --- service (round 2) ---
+
+export def @error in service {
+  > Declared failure mode — error code, HTTP status mapping, and resolution guidance.
+  code,
+  status,
+}
+
+export def @@paged in service {
+  > Modifier shorthand — marks the next @api as a paginated endpoint.
+}
+
+export def #publish in service {
+  > Marks an operation as an event publisher — emits one or more domain events on success.
+}
+
+// --- module (round 2) ---
+
+export def #subscribe in module {
+  > Marks a module as an event consumer — handles events published by other modules or services.
+}
+
+export def @contract in module {
+  > API contract versioning and breaking-change policy for this module's public surface.
+}
+
+// --- field (round 2) ---
+
+export def @@deprecated in field, service {
+  > Marks a field or operation as deprecated — indicates a planned removal timeline.
+  since,
+  replacement,
+}
+
+export def @@readonly in field {
+  > Field is immutable after creation — write-once semantics.
+}
+
+export def @@computed in field {
+  > Field value is derived, not stored — formula or computation intent.
+}
+
+export def @@filterable in field {
+  > Field is queryable in list/search endpoints — supports filtering.
+}
+
+export def @@sortable in field {
+  > Field supports ordering in list endpoints — ASC/DESC intent.
+}
+
+export def @@searchable in field {
+  > Field supports full-text search — indexed for text queries.
+}
+
+export def @@id in field {
+  > Generic identifier marker — UUID, ULID, or auto-increment intent.
+}
+
+export def @@created_at in field {
+  > Creation timestamp marker — set once on insert.
+}
+
+export def @@updated_at in field {
+  > Modification timestamp marker — updated on every change.
+}
+
+export def @@soft_delete in field {
+  > Soft-delete marker column — boolean or timestamp for logical deletion.
+}
+
+// --- product / module (round 2) ---
+
+export def @lifecycle in product, module {
+  > Product or module lifecycle state — draft, active, maintenance, or sunset.
+  stage,
+}
+
+export def @dependencies in product, module {
+  > Declares external service or system dependencies with criticality ratings.
+}
+
+export def @client in product {
+  > External API client or SDK generation intent — target language and auth method.
+}

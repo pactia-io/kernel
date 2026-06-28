@@ -40,3 +40,45 @@ export def @batch in module, service {
 export def @stream in module, service {
   > Streaming or event pipeline intent — continuous processing, ordering, and consumer groups at design level.
 }
+
+// --- round 2 ---
+
+export def @health in service, module {
+  > Health check endpoints — liveness, readiness, and startup probe configuration.
+}
+
+export def @tracing in module, service {
+  > Distributed tracing configuration — sample rate, propagation format, exporter.
+}
+
+export def @log_level in module, service {
+  > Per-scope log verbosity — error, warn, info, debug, trace.
+}
+
+export def @circuit_breaker in service, module {
+  > Circuit breaker thresholds for external calls — failure count, timeout, half-open window.
+}
+
+export def @retry in service, module {
+  > Retry policy — max attempts, backoff strategy, jitter.
+}
+
+export def @timeout in service {
+  > Operation timeout defaults — connect, read, and total timeout durations.
+}
+
+export def @throttle in module, service {
+  > Concurrency caps beyond rate limits — max parallel requests or connections.
+}
+
+export def @graceful_shutdown in module {
+  > Graceful shutdown — drain timeout, in-flight request completion window.
+}
+
+export def @warmup in module, service {
+  > Startup warmup strategy — cache preload, connection pool fill.
+}
+
+export def @canary in product, module {
+  > Canary deployment analysis — traffic percentage, metrics, duration, rollback criteria.
+}

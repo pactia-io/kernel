@@ -1,0 +1,7 @@
+[package]
+name = "@pactia/kernel-privacy"
+version = "1.0.0"
+description = "Privacy-specific intent — GDPR, consent, DPIA, data minimization"
+
+[dependencies]
+"@pactia/kernel" = "^1.0"
