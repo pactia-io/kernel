@@ -1,10 +1,10 @@
 # @pactia/kernel
 
-Standard library of **domain-neutral software intent** for Pactia.
+**The default package.** Universal across every surface Pactia targets.
 
-Kernel tags and macros describe *what* a product must satisfy across architecture, data, APIs, policy, quality, deployment, and operations — without naming a language, framework, wire format, or business domain.
+Kernel tags and modifiers describe *what* a product must satisfy — without naming a language, framework, wire format, or business domain.
 
-Publish target: **`github.com/pactia-lang/kernel`** (git remote + semver tags, Go-style).  
+Publish target: **`github.com/pactia-io/kernel`** (git remote + semver tags, Go-style).  
 Consume with: `import @pactia/kernel;` in `product.pactia` / package `index.pactia`.
 
 Stack, protocol, surface, and vertical packages live in **[pactia-lang/pactia-io](https://github.com/pactia-lang/pactia-io)** — not in this repo.
@@ -13,30 +13,22 @@ Part of: [pactia-lang/spec](../spec/docs/packages.md) | [language-spec](../spec/
 
 ---
 
-## Role in the stack
+## Scope
 
-| Layer | Package | Publish | Owns |
-| --- | --- | --- | --- |
-| **Kernel** | `@pactia/kernel` (+ `@pactia/kernel-*`) | [pactia-lang/kernel](https://github.com/pactia-lang/kernel) | Universal structure and engineering intent |
-| **Stack** | `@pactia/*` stack crates | [pactia-lang/pactia-io](https://github.com/pactia-lang/pactia-io) | Platform law — language, framework, CI, deploy defaults |
-| **Protocol** | `@pactia/protocol-*` | [pactia-lang/pactia-io](https://github.com/pactia-lang/pactia-io) | Wire format — REST, gRPC, GraphQL, … |
-| **Vertical** | `@pactia/*` domain patterns | [pactia-lang/pactia-io](https://github.com/pactia-lang/pactia-io) | Payments, catalog, compliance entities, … |
-| **Surface** | `@pactia/surface-*` | [pactia-lang/pactia-io](https://github.com/pactia-lang/pactia-io) | UI framework registration |
+Pactia describes any software product built around **actors, operations, and data** — backend services, mobile apps, desktop apps, frontends, and CLI tools alike. The kernel is the minimal, platform-agnostic vocabulary every one of those paradigms needs.
 
-Kernel answers **what**. Stack and protocol answer **how**.
+The test for kernel inclusion: does every paradigm need this, is it declarative, and is it inexpressible by combining other kernel primitives? If any answer is no, it belongs in a package, not the kernel.
 
 ---
 
 ## Design laws
 
-1. **Domain-neutral** — useful for APIs, CLIs, batch jobs, mobile backends, and embedded services alike.
-2. **Technology-neutral** — say `sql` or `cache`, not `sqlx` or `Redis`; stacks supply implementations.
-3. **Prose-first** — every tag works with `>` guidance lines; structured fields are optional upgrades.
+1. **Domain-neutral** — useful for APIs, CLIs, mobile backends, frontends, and CLI tools alike.
+2. **Technology-neutral** — describe structure, operations, and contracts; stacks supply implementation.
+3. **Prose-first** — every symbol works with `>` guidance lines; structured fields are optional upgrades.
 4. **Open extension** — tags accept extra fields; products extend without forking kernel.
-5. **Small core, rich satellites** — one mandatory core package; optional `@pactia/kernel-*` slices for depth.
+5. **Single package** — one `pactia.toml` + `index.pactia` at repo root. No slices, no sub-packages.
 6. **Source of truth** — `index.pactia` only (`export def`); no generated JSON manifest.
-
-**Inclusion test:** Would a marketplace API, a CLI tool, and a static site generator all plausibly use this tag? If no, it belongs in a stack, protocol, or vertical package.
 
 ---
 
@@ -45,170 +37,168 @@ Kernel answers **what**. Stack and protocol answer **how**.
 ```text
 kernel/
   README.md
-  core/
-    pactia.toml               # @pactia/kernel
-    index.pactia              # core tags + @pactia
-  data/pactia.toml + index.pactia       # @pactia/kernel-data
-  ops/pactia.toml + index.pactia        # @pactia/kernel-ops
-  quality/pactia.toml + index.pactia    # @pactia/kernel-quality
-  governance/pactia.toml + index.pactia # @pactia/kernel-governance
-  engineering/pactia.toml + index.pactia
-  architecture/pactia.toml + index.pactia
+  pactia.toml                  # @pactia/kernel v1.0.0
+  index.pactia                 # all kernel exports
 ```
 
-Each slice is a separate published package at v0.0.1 — `pactia.toml` + `index.pactia` only, prose-first export defs.
-
-Products import only what they need:
-
-```pactia
-import @pactia/kernel;
-import @pactia/kernel-data;      // when persistence story matters
-import @pactia/kernel-ops;       // when deploy / monitor matter
-```
+Former kernel slices (`kernel-data`, `kernel-ops`, `kernel-quality`, `kernel-governance`, `kernel-engineering`, `kernel-architecture`, `kernel-privacy`, `kernel-security`) are community packages — see the [enrichment roadmap](../../plans/library-enrichment/pactia-package-enrichment-roadmap.md).
 
 ---
 
-## Tag taxonomy
+## Kernel symbol reference (v1.0.0 — 38 symbols)
 
-### Core (`@pactia/kernel`) — Phase 1
+### Meta — inline tag & modifier constructors
 
-Structure every product shares.
+| Symbol | Purpose |
+|---|---|
+| `@tag` | Inline tag constructor — define and use a one-off tag anywhere without pre-declaring it in a package. Cross-cutting (`product, module, service, model`). |
+| `@@modifier` | Inline modifier constructor — define and use a one-off modifier on the next host tag anywhere without pre-declaring it. Cross-cutting (`product, module, service, model`). |
 
-| Scope | Tags / macros | Purpose |
-| --- | --- | --- |
-| **product** | `@topology`, `@tenancy`, `@guide`, `@stack`, `@pactia` | System shape, isolation, guidance; `@stack` is optional profile block after a stack-package macro imported in source |
-| **module** | `@actor`, `@rule`, `@security`, `@integration`, `@event`, `@environment`, `@deploy`, `@gate` | Roles, rules, integrations, events, env, deploy intent, quality gates |
-| **model** | `@entity`, `@enum`, `@relation`, `@states`, `@pk`, `@fk`, `@unique`, `@index`, `@nullable`, `@pii` | Data model and field constraints |
-| **service** | `@api`, `@auth`, `@input`, `@output`, `@public`, `@emit`, `@throws`, `@status`, `@test`, `@must` | Operations, contracts, acceptance scenarios, obligations |
-| **service** | `#create`, `#idempotent`, `#database` | Common operation macros |
-| **surface** | `@surface` | Generic UI attachment (platform, screen, route) |
-| **module** | `@policy`, `@config`, `@errors`, `@observe` | Policy hooks, configuration, error catalog, observability intent |
+### Structure & shape — `model`-scoped
 
-### Data (`@pactia/kernel-data`) — Phase 2
+| Symbol | Purpose |
+|---|---|
+| `@entity` | A data shape with identity (has a primary key) |
+| `@enum` | A closed set of named values |
+| `@relation` | Connects two entities (owns, has, references) |
+| `@states` | Legal state transitions on a field |
+| `@store` | Device-local / client-only persistence (mobile/desktop offline data) |
 
-Persistence and data architecture intent.
+### Field modifiers — `model`-scoped, `@@`
 
-| Tag | Purpose |
-| --- | --- |
-| `@store` | Storage kind: `sql`, `document`, `kv`, `graph`, `column` (not a vendor name) |
-| `@cache` | Cache layers, TTL, invalidation strategy |
-| `@schema` | Migration and schema versioning intent |
-| `@consistency` | Strong / eventual / session consistency |
-| `@query` | Read-side / CQRS query patterns |
-| `@retain`, `@encrypt` | Retention and encryption intent on fields |
+| Symbol | Purpose |
+|---|---|
+| `@@pk` | Primary key / identity field |
+| `@@fk` | Foreign key / reference to another entity |
+| `@@unique` | Uniqueness constraint |
+| `@@index` | Indexed for lookup |
+| `@@nullable` | Optional field |
+| `@@pii` | Personally identifiable — forks into policy-facing output |
+| `@@secret` | Sensitive, never logged, config-bound |
 
-### Operations (`@pactia/kernel-ops`) — Phase 2
+### Operations — `service`-scoped
 
-Runtime, deployment, monitoring.
+| Symbol | Purpose |
+|---|---|
+| `@api` | A callable operation — protocol-agnostic, binds to any surface |
+| `@auth` | Who may call this operation |
+| `@throws` | Declared error outcomes for this operation |
+| `@emit` | Event(s) produced by this operation |
+| `@@input` | Request/input shape modifier |
+| `@@output` | Response/output shape modifier |
 
-| Tag | Purpose |
-| --- | --- |
-| `@container` | OCI image, health / ready probes |
-| `@orchestration` | Kubernetes, Compose, bare metal (intent only) |
-| `@rollout` | Blue/green, canary, rolling |
-| `@slo`, `@alert`, `@runbook` | SLI/SLO, alerting, operational docs |
-| `@feature` | Feature-flag intent |
-| `@schedule`, `@batch`, `@stream` | Jobs, batch, streaming |
+### Identity & access — cross-cutting
 
-### Quality (`@pactia/kernel-quality`) — Phase 2
+| Symbol | Purpose |
+|---|---|
+| `@actor` | Defines a role and its capabilities — product or module scope |
 
-Testing and conformance beyond unit code.
+### Events — cross-cutting
 
-| Tag | Purpose |
-| --- | --- |
-| `@integration_test` | Real DB, wire boundaries, external systems |
-| `@unit_test` | Isolated logic — mocks, no real wire or database |
-| `@load_test` | Performance and capacity validation under stress |
-| `@benchmark` | Timed baselines for a specific path — latency and regression tracking |
-| `@gate` | CI gates — coverage, lint, security scan (extends module scope) |
+| Symbol | Purpose |
+|---|---|
+| `@event` | Declares an event name + payload shape |
+| `@on` | Wiring: event → consumer |
 
-### Governance (`@pactia/kernel-governance`) — Phase 2
+### Errors — cross-cutting
 
-Policy, compliance, audit.
+| Symbol | Purpose |
+|---|---|
+| `@error` | Declares an error code + meaning, referenced by `@throws` |
 
-| Tag | Purpose |
-| --- | --- |
-| `@compliance` | Generic compliance flags (GDPR, SOC2, …) |
-| `@audit` | Audit logging requirements |
-| `@secrets` | Secret handling — never in repo, rotation |
-| `@residency` | Data residency / region constraints |
-| `@ratelimit` | Rate limiting intent |
+### Rules & obligations — cross-cutting
 
-### Engineering (`@pactia/kernel-engineering`) — Phase 2
+| Symbol | Purpose |
+|---|---|
+| `@rule` | An enforceable invariant — declarative, always true |
+| `@must` | An obligation: "when X happens, Y must follow" |
 
-Repository and practice intent (for humans and agents, not a replacement for git).
+### Configuration — cross-cutting
 
-| Tag | Purpose |
-| --- | --- |
-| `@layout` | Monorepo / polyrepo intent |
-| `@ownership` | Team ownership (CODEOWNERS intent) |
-| `@documentation` | ADRs, API docs, README requirements |
-| `@versioning` | Semver, API deprecation policy |
-| `@pattern` | Design patterns — repository, CQRS, saga, outbox, … |
-| `@context`, `@capacity`, `@resilience`, `@flow` | System design — context, scale, resilience, data flow |
+| Symbol | Purpose |
+|---|---|
+| `@config` | Required/optional externally-supplied value (env var, API key, license key) |
 
-### Architecture extensions — Phase 3
+### Product structure
 
-| Tag | Purpose |
-| --- | --- |
-| `@backup`, `@disaster_recovery` | DR and backup |
-| `@multiregion` | Multi-region topology |
-| `@i18n`, `@a11y` | Localization and accessibility intent |
-| `@cost` | FinOps / cost constraints |
-| `@incident` | Incident response hooks |
-| `@deprecated` | Deprecation policy on APIs and fields |
+| Symbol | Purpose |
+|---|---|
+| `@topology` | Product shape: backend, client, hybrid, and sub-shapes |
 
----
+### Testing
 
-## Explicitly not in kernel
+| Symbol | Purpose |
+|---|---|
+| `@test` | An acceptance scenario — given/when/then shape |
 
-| Concern | Where it lives |
-| --- | --- |
-| Language, framework, ORM, CI YAML | Stack packages in [pactia-io](https://github.com/pactia-lang/pactia-io) |
-| REST `method` / `path`, gRPC proto | Protocol packages in [pactia-io](https://github.com/pactia-lang/pactia-io) |
-| `Order`, `Invoice`, KYC rules | Product source or vertical packages in [pactia-io](https://github.com/pactia-lang/pactia-io) |
-| React / SwiftUI components | Surface packages in [pactia-io](https://github.com/pactia-lang/pactia-io) |
-| Pagination defaults, list helpers | Stack macros |
+### Surfaces & binding
 
----
+| Symbol | Purpose |
+|---|---|
+| `@surface` | UI or interaction surface — web, mobile, desktop, or cli |
+| `@bind` | Connects a surface element to an operation |
+| `@screen` | Names a UI view/screen within a surface |
+| `@nav` | How a screen is reached — tab, stack push, modal, deep-link route |
+| `@command` | Names a CLI command, binds to an `@api` |
+| `@flag` | Named option on a CLI command — maps to `@@input` fields |
+| `@arg` | Positional argument on a CLI command — maps to `@@input` fields |
 
-## Altitude model
+### Integration
 
-Kernel tags support graded precision (see [overview](../spec/docs/overview.md)):
+| Symbol | Purpose |
+|---|---|
+| `@integration` | Binding to an external system — third-party API, webhook, device sensor |
 
-| Altitude | Kernel usage |
-| --- | --- |
-| **0** | Prose only — no kernel import required |
-| **1** | Light tagging — `@api`, `@auth`, `@entity` with partial fields |
-| **2** | Full enforcement — wire fields via protocol import, `@test` / `@must`, `@gate` |
+### Guidance
+
+| Symbol | Purpose |
+|---|---|
+| `@guide` | AI-facing advisory text — never enforced, never gated by conformance |
 
 ---
 
-## Roadmap
+## Coverage by paradigm
 
-| Phase | Deliverable |
-| --- | --- |
-| **1** | Core + satellite packages published from this repo (`core/`, `data/`, `ops/`, …) at v0.0.1 |
-| **2** | Satellite packages or submodules: data, ops, quality, governance, engineering |
-| **3** | Architecture extensions; `@pattern` macro library; JSON Schema bodies in spec sync |
+| Paradigm | Status | Notes |
+|---|---|---|
+| Backend / API service | Full | Original design target — `service`, `@api`, `@auth`, `@entity`, `@event` |
+| Mobile (Flutter, SwiftUI, React Native) | Full | `@surface mobile` + `@screen` + `@nav` + `@store` cover navigation and offline data |
+| Desktop (Electron, Tauri, native) | Full | Same surface mechanism as mobile |
+| Frontend / SPA | Full | `@bind` targeting `@integration` covers binding to external or non-Pactia backends |
+| CLI tools | Full | `@surface cli` + `@command` + `@flag` + `@arg`, same `@bind` mechanism |
+| Embedded / firmware | Out of scope | No actors, no operations, no surface — below the contract line |
+| Batch / ML pipelines | Out of scope | Algorithmic, not contract-shaped |
+
+---
+
+## Explicitly excluded from kernel — these are packages
+
+| Concept | Lives in |
+|---|---|
+| Language, framework, runtime specifics | Stack packages (`@pactia/rust-stack`, …) |
+| Deploy specifics (replicas, regions, gates) | Community ops packages |
+| Security specifics (OWASP, encryption detail) | `@pactia/kernel-security` |
+| Privacy/compliance specifics (GDPR, retention) | `@pactia/kernel-privacy`, `@pactia/kernel-governance` |
+| Observability (SLOs, metrics, alerts) | Community ops packages |
+| Protocol wire formats (REST, gRPC, GraphQL) | Protocol packages |
+| Database specifics (Postgres, Mongo, SQLite) | Database packages |
+| `function`, `class`, `interface` as code | Nowhere — below the contract line, in any paradigm |
 
 ---
 
 ## Development
 
-Kernel is a normal Pactia library crate:
+Kernel is a normal Pactia library package:
 
 ```text
-pactia.toml     # Cargo.toml — name, version, kind = "library"
-index.pactia    # lib.rs — export def @… / #… / @@…
+pactia.toml     # name, version, kind = "library"
+index.pactia    # export def @… / @@… / #…
 ```
 
-Validate by compiling products that import kernel (see [pactiac](../pactiac) relay fixture and [marketplace](../examples/marketplace) example).
+Validate by compiling products that import kernel (see [pactiac](../pactiac) relay fixture).
 
 ```bash
-# after index.pactia exists
 cd ../pactiac && npm test
-cd ../examples/marketplace && ../../pactia/dist/cli.js build
 ```
 
 ---

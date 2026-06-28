@@ -1,5 +1,0 @@
-[package]
-name = "@pactia/kernel-ops"
-version = "0.0.1"
-kind = "library"
-description = "Runtime, deployment, and monitoring intent"

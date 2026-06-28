@@ -1,7 +1,0 @@
-[package]
-name = "@pactia/kernel-security"
-version = "1.0.0"
-description = "Security posture intent — OWASP, encryption, auth, zero trust"
-
-[dependencies]
-"@pactia/kernel" = "^1.0"
