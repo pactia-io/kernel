@@ -1,5 +1,0 @@
-[package]
-name = "@pactia/kernel"
-version = "0.0.1"
-kind = "library"
-description = "Core domain-neutral software intent — product, module, model, service structure"

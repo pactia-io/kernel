@@ -1,0 +1,5 @@
+[package]
+name = "@pactia/kernel"
+version = "1.0.0"
+kind = "library"
+description = "Universal declarative software intent — structure, operations, events, rules, surfaces, and guidance for every product paradigm"

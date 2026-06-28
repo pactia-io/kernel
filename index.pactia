@@ -1,0 +1,228 @@
+pactia 1.0
+// Package: @pactia/kernel — universal declarative software intent (v1.0.0)
+//
+// Kernel answers *what* a product must satisfy across every paradigm —
+// backend services, mobile apps, desktop apps, frontends, and CLI tools.
+// Surface, stack, and protocol packages adapt these primitives; the kernel
+// never assumes HTTP, a screen, a terminal, or any other specific surface.
+//
+// Inclusion test: does every paradigm need this, is it declarative,
+// and is it inexpressible by combining other kernel primitives?
+
+// ===========================================================================
+// product — top-level shape and guidance
+// ===========================================================================
+
+export def @topology in product {
+  > Declares product shape — backend, client, hybrid — and sub-shapes
+  > (monolith, microservices, offline-first, single-binary).
+}
+
+export def @guide in product {
+  > AI-facing advisory text. Never enforced, never gated by conformance.
+  > Prose rules for humans and agents — coding standards, invariants,
+  > and conventions that apply everywhere.
+}
+
+// ===========================================================================
+// cross-cutting — valid in multiple scopes
+// ===========================================================================
+
+export def @tag in product, module, service, model {
+}
+
+export def @@modifier in field {
+}
+
+export def @actor in product, module,service {
+  > Defines a role and its capabilities — human, service account,
+  > or external actor.
+}
+
+export def @config in product, module ,service ,model{
+  > Declares a required or optional externally-supplied value —
+  > env var, API key, license key. Universal across backend and
+  > client products alike.
+}
+
+export def @rule in product, module ,service ,model {
+  > An enforceable invariant — declarative, always true.
+  > Business or technical rule that applies across the scope.
+}
+
+export def @must in product, module ,service ,model {
+  > An obligation: when X happens, Y must follow.
+  > Hard requirement beyond prose guidance — enforceable invariant.
+}
+
+export def @error in  module ,service ,model{
+  > Declares an error code and meaning.
+  > Referenced by @throws on individual operations.
+}
+
+// ===========================================================================
+// module — boundary and external touchpoints
+// ===========================================================================
+
+export def @event in  module ,service ,model {
+  > Declares an event name and payload shape.
+  > Domain or integration event with handler responsibility.
+}
+
+export def @on in  module ,service ,model {
+  > Wiring: event → consumer.
+  > Declares which handler reacts to which event.
+}
+
+export def @integration in module {
+  > Declares a binding to an external system — third-party API,
+  > webhook, device sensor, or OS-level capability.
+  > Universal shape even though content varies by paradigm.
+}
+
+// ===========================================================================
+// model — data shape and constraints
+// ===========================================================================
+
+export def @entity in model {
+  > A data shape with identity — has a primary key.
+  > Persistent data that can be created, read, updated, and deleted.
+}
+
+export def @enum in model {
+  > A closed set of named values.
+  > Discrete choices that constrain a field or parameter.
+}
+
+export def @relation in model {
+  > Connects two entities — owns, has, or references.
+  > Declares how data shapes relate to each other.
+}
+
+export def @states in model {
+  > Legal state transitions on a field.
+  > From/to state machine defining allowed lifecycle changes.
+}
+
+export def @store in model {
+  > Marks an entity or field set as device-local / client-only
+  > persistence — not server-backed. Needed for mobile/desktop
+  > offline data, on-device cache, secure local storage.
+}
+
+// --- field modifiers ---
+
+export def @@pk in field {
+  > Primary key / identity field.
+  > Uniquely identifies an entity instance.
+}
+
+export def @@fk in field {
+  > Foreign key / reference to another entity.
+  > Establishes a relationship to the primary key of another entity.
+}
+
+export def @@unique in field {
+  > Uniqueness constraint.
+  > No two entity instances may have the same value for this field.
+}
+
+export def @@index in field {
+  > Indexed for lookup.
+  > Optimised for querying by this field.
+}
+
+export def @@nullable in field {
+  > Optional field.
+  > May be absent or null for some entity instances.
+}
+
+export def @@pii in field {
+  > Personally identifiable information.
+  > Forks into policy-facing output for privacy, retention,
+  > and access control.
+}
+
+export def @@secret in field {
+  > Sensitive value — never logged, never exposed in plain text.
+  > Config-bound; derived from an external secret store.
+}
+
+// ===========================================================================
+// service — operations and behavior
+// ===========================================================================
+
+export def @api in service {
+  > A callable operation. Protocol-agnostic — not HTTP-specific,
+  > not REST-specific. Binds to any surface.
+}
+
+export def @auth in service {
+  > Who may call this operation — roles, scopes, or actor constraints.
+}
+
+export def @throws in service {
+  > Declared error outcomes for this operation.
+  > References @error declarations by name.
+}
+
+export def @emit in service {
+  > Event(s) produced by this operation on success.
+  > References @event declarations by name.
+}
+
+export def @@input in service {
+  > Request / input shape modifier.
+  > Binds a model or inline shape to the operation's input.
+}
+
+export def @@output in service {
+  > Response / output shape modifier.
+  > Binds a model or inline shape to the operation's output.
+}
+
+export def @test in service {
+  > An acceptance scenario — given/when/then shape
+  > describing observable behavior.
+}
+
+// ===========================================================================
+// surfaces & binding — multi-paradigm
+// ===========================================================================
+
+export def @surface in product {
+  > Declares a UI or interaction surface exists —
+  > web, mobile, desktop, or cli.
+  > Generic, not framework-specific.
+}
+
+export def @bind in service {
+  > Connects a surface element to an operation.
+  > Targets either (a) a local @api declared in this product,
+  > or (b) an @integration for external/non-Pactia systems.
+}
+
+export def @screen in service {
+  > Names a UI view/screen within a web, mobile, or desktop surface.
+  > Labels a visual boundary for binding operations.
+}
+
+export def @nav in service {
+  > How a screen is reached — tab, stack push, modal,
+  > deep-link route. Mobile/desktop-relevant.
+}
+
+export def @command in service {
+  > Names a CLI command.
+  > Binds to an @api operation for terminal invocation.
+}
+
+export def @flag in service {
+  > Declares a named option on a CLI command.
+  > Maps to @@input fields on the bound operation.
+}
+
+export def @arg in service {
+  > Declares a positional argument on a CLI command.
+  > Maps to @@input fields on the bound operation.
+}

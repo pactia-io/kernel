@@ -1,5 +1,0 @@
-[package]
-name = "@pactia/kernel-architecture"
-version = "0.0.1"
-kind = "library"
-description = "Cross-cutting architecture extensions — DR, multiregion, cost, accessibility"
