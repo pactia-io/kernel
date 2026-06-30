@@ -1,5 +1,23 @@
 # Changelog
 
+## 1.1.0 — 2026-06-30
+
+### Added
+- **4 new field modifiers**: `@@uuid`, `@@email`, `@@min`, `@@max` — format and value constraints on entity fields.
+- **`@@min` and `@@max` support modifier shorthand**: `@@min(0)`, `@@max(255)` with inline numeric values.
+- **Field specs on `@api`**: `method` and `path` required, `summary` optional. Redundant HTTP-specific fields removed.
+- **Field spec on `@event`**: `payload` required, `version` optional (defaults to `"1"`).
+- **Field specs on `@auth`**: `roles`, `scopes`, `actors` — all optional arrays. At least one expected.
+- **Field specs on `@entity`**: `table` and `schema` — both optional strings.
+
+### Changed
+- **Prose tightened** — removed implementation details from `@entity`, `@@fk`, `@@index`, `@@pii`, `@@secret`, `@integration`, `@store`.
+- **`@@modifier` scope expanded** from `field` to `service, field` — modifiers like `@@input`/`@@output` work in service context.
+- **Surface/CLI tags moved** from `service` to `product` scope: `@screen`, `@nav`, `@bind`, `@command`, `@flag`, `@arg`.
+- **`@event` and `@on` scopes** narrowed from `module, service, model` to `module, service` — events are behavioral, not data.
+- **Whitespace normalized** on all `in` clauses.
+- **`@tag` and `@@modifier`** now include prose descriptions.
+
 ## 1.0.0 — 2026-06-29
 
 ### Added

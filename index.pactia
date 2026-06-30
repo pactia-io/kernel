@@ -29,34 +29,37 @@ export def @guide in product {
 // ===========================================================================
 
 export def @tag in product, module, service, model {
+  > Inline tag constructor. Define a one-off tag at the use site
+  > without pre-declaring it in a package.
 }
 
-export def @@modifier in field {
+export def @@modifier in service, field {
+  > Inline modifier constructor. Define a one-off modifier on the
+  > next host tag or field without pre-declaring it in a package.
 }
 
-export def @actor in product, module,service {
-  > Defines a role and its capabilities — human, service account,
-  > or external actor.
+export def @actor in product, module, service {
+  > A role with capabilities — human user, service account,
+  > or external system.
 }
 
-export def @config in product, module ,service ,model{
-  > Declares a required or optional externally-supplied value —
-  > env var, API key, license key. Universal across backend and
-  > client products alike.
+export def @config in product, module, service, model {
+  > An externally-supplied value — env var, API key, feature flag.
+  > Required or optional. Universal across backend and client.
 }
 
-export def @rule in product, module ,service ,model {
-  > An enforceable invariant — declarative, always true.
-  > Business or technical rule that applies across the scope.
+export def @rule in product, module, service, model {
+  > An enforceable invariant — always true within its scope.
+  > Business or technical rule.
 }
 
-export def @must in product, module ,service ,model {
+export def @must in product, module, service, model {
   > An obligation: when X happens, Y must follow.
-  > Hard requirement beyond prose guidance — enforceable invariant.
+  > Hard requirement, not guidance.
 }
 
-export def @error in  module ,service ,model{
-  > Declares an error code and meaning.
+export def @error in module, service, model {
+  > An error code and its meaning.
   > Referenced by @throws on individual operations.
 }
 
@@ -64,20 +67,20 @@ export def @error in  module ,service ,model{
 // module — boundary and external touchpoints
 // ===========================================================================
 
-export def @event in  module ,service ,model {
-  > Declares an event name and payload shape.
-  > Domain or integration event with handler responsibility.
+export def @event in module, service {
+  > A domain or integration event with a name and payload shape.
+  payload,
+  version: "1",
 }
 
-export def @on in  module ,service ,model {
-  > Wiring: event → consumer.
-  > Declares which handler reacts to which event.
+export def @on in module, service {
+  > Wiring: event → handler.
+  > Declares which service reacts to which event.
 }
 
 export def @integration in module {
-  > Declares a binding to an external system — third-party API,
-  > webhook, device sensor, or OS-level capability.
-  > Universal shape even though content varies by paradigm.
+  > A binding to an external system — third-party API, webhook,
+  > or platform capability.
 }
 
 // ===========================================================================
@@ -85,8 +88,10 @@ export def @integration in module {
 // ===========================================================================
 
 export def @entity in model {
-  > A data shape with identity — has a primary key.
-  > Persistent data that can be created, read, updated, and deleted.
+  > A data shape with identity.
+  > Persistent data owned by the product.
+  table: "",
+  schema: "",
 }
 
 export def @enum in model {
@@ -105,9 +110,8 @@ export def @states in model {
 }
 
 export def @store in model {
-  > Marks an entity or field set as device-local / client-only
-  > persistence — not server-backed. Needed for mobile/desktop
-  > offline data, on-device cache, secure local storage.
+  > Device-local persistence — not server-backed.
+  > For offline data, on-device cache, or client-only storage.
 }
 
 // --- field modifiers ---
@@ -118,34 +122,54 @@ export def @@pk in field {
 }
 
 export def @@fk in field {
-  > Foreign key / reference to another entity.
-  > Establishes a relationship to the primary key of another entity.
+  > Foreign key — references another entity.
 }
 
 export def @@unique in field {
   > Uniqueness constraint.
-  > No two entity instances may have the same value for this field.
+  > No two instances may share this value.
 }
 
 export def @@index in field {
-  > Indexed for lookup.
-  > Optimised for querying by this field.
+  > Indexed for fast lookup.
 }
 
 export def @@nullable in field {
-  > Optional field.
-  > May be absent or null for some entity instances.
+  > Optional — may be absent.
 }
 
 export def @@pii in field {
   > Personally identifiable information.
-  > Forks into policy-facing output for privacy, retention,
-  > and access control.
+  > Triggers privacy, retention, and access-control policies.
 }
 
 export def @@secret in field {
-  > Sensitive value — never logged, never exposed in plain text.
-  > Config-bound; derived from an external secret store.
+  > Sensitive — never logged, never exposed.
+  > Stored in a secure vault, not application config.
+}
+
+export def @@uuid in field {
+  > UUID format constraint.
+  > Field value must be a valid UUID v4 string.
+}
+
+export def @@email in field {
+  > Email format constraint.
+  > Field value must be a valid email address.
+}
+
+export def @@min in field {
+  > Field has a minimum constraint — `@@min(0)` or `@@min(1)`.
+  > Modifier shorthand: `@@min(number)` applies a minimum value.
+  > Use on numeric or string fields to declare a lower bound.
+  modifier,
+}
+
+export def @@max in field {
+  > Field has a maximum constraint — `@@max(100)` or `@@max(255)`.
+  > Modifier shorthand: `@@max(number)` applies a maximum value.
+  > Use on numeric or string fields to declare an upper bound.
+  modifier,
 }
 
 // ===========================================================================
@@ -155,10 +179,17 @@ export def @@secret in field {
 export def @api in service {
   > A callable operation. Protocol-agnostic — not HTTP-specific,
   > not REST-specific. Binds to any surface.
+  method,
+  path,
+  summary: "",
 }
 
 export def @auth in service {
-  > Who may call this operation — roles, scopes, or actor constraints.
+  > Who may call this operation.
+  > At least one of roles, scopes, or actors must be specified.
+  roles: [],
+  scopes: [],
+  actors: [],
 }
 
 export def @throws in service {
@@ -191,38 +222,29 @@ export def @test in service {
 // ===========================================================================
 
 export def @surface in product {
-  > Declares a UI or interaction surface exists —
-  > web, mobile, desktop, or cli.
-  > Generic, not framework-specific.
+  > A UI or interaction surface — web, mobile, desktop, or CLI.
 }
 
-export def @bind in service {
-  > Connects a surface element to an operation.
-  > Targets either (a) a local @api declared in this product,
-  > or (b) an @integration for external/non-Pactia systems.
+export def @screen in product {
+  > A named view or screen within a UI surface.
 }
 
-export def @screen in service {
-  > Names a UI view/screen within a web, mobile, or desktop surface.
-  > Labels a visual boundary for binding operations.
+export def @nav in product {
+  > How a screen is reached — tab, stack push, modal, deep link.
 }
 
-export def @nav in service {
-  > How a screen is reached — tab, stack push, modal,
-  > deep-link route. Mobile/desktop-relevant.
+export def @bind in product {
+  > Connects a surface element to an @api or @integration.
 }
 
-export def @command in service {
-  > Names a CLI command.
-  > Binds to an @api operation for terminal invocation.
+export def @command in product {
+  > A CLI command bound to an @api operation.
 }
 
-export def @flag in service {
-  > Declares a named option on a CLI command.
-  > Maps to @@input fields on the bound operation.
+export def @flag in product {
+  > A named CLI option mapped to an @@input field.
 }
 
-export def @arg in service {
-  > Declares a positional argument on a CLI command.
-  > Maps to @@input fields on the bound operation.
+export def @arg in product {
+  > A positional CLI argument mapped to an @@input field.
 }
