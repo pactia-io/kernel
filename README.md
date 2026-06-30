@@ -45,7 +45,7 @@ Former kernel slices (`kernel-data`, `kernel-ops`, `kernel-quality`, `kernel-gov
 
 ---
 
-## Kernel symbol reference (v1.0.0 — 38 symbols)
+## Kernel symbol reference (v1.1.0 — 42 symbols: 28 @ tags + 14 @@ modifiers)
 
 ### Meta — inline tag & modifier constructors
 
@@ -68,13 +68,17 @@ Former kernel slices (`kernel-data`, `kernel-ops`, `kernel-quality`, `kernel-gov
 
 | Symbol | Purpose |
 |---|---|
-| `@@pk` | Primary key / identity field |
-| `@@fk` | Foreign key / reference to another entity |
-| `@@unique` | Uniqueness constraint |
-| `@@index` | Indexed for lookup |
-| `@@nullable` | Optional field |
-| `@@pii` | Personally identifiable — forks into policy-facing output |
-| `@@secret` | Sensitive, never logged, config-bound |
+| `@@pk` | Primary key — uniquely identifies an entity instance |
+| `@@fk` | Foreign key — references another entity |
+| `@@unique` | Uniqueness constraint — no two instances may share this value |
+| `@@index` | Indexed for fast lookup |
+| `@@nullable` | Optional — may be absent |
+| `@@pii` | Personally identifiable — triggers privacy and retention policies |
+| `@@secret` | Sensitive — never logged, stored in a secure vault |
+| `@@uuid` | UUID v4 format constraint |
+| `@@email` | Email format constraint |
+| `@@min` | Minimum value/length — `@@min(0)` |
+| `@@max` | Maximum value/length — `@@max(255)` |
 
 ### Operations — `service`-scoped
 
